@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LuxeWash — Premium Laundry Care</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --gold: #c9a961;
+  --gold-light: #e6c87a;
+  --ink: #1a1d26;
+  --ink-soft: #2a2e3a;
+  --cream: #faf7f2;
+  --muted: #8b8fa3;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+/* ---------- NAV ---------- */
+nav {
+  position: fixed; top: 0; width: 100%; z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 22px 6%;
+  transition: all .4s ease;
+  background: transparent;
+}
+nav.scrolled {
+  background: rgba(26,29,38,.92);
+  backdrop-filter: blur(14px);
+  padding: 14px 6%;
+  box-shadow: 0 4px 30px rgba(0,0,0,.3);
+}
+.logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem; font-weight: 700;
+  color: #fff; letter-spacing: 1px;
+}
+.logo span { color: var(--gold); }
+.nav-links { display: flex; gap: 36px; list-style: none; }
+.nav-links a {
+  color: rgba(255,255,255,.85); text-decoration: none;
+  font-size: .85rem; letter-spacing: 2px; text-transform: uppercase;
+  transition: color .3s; position: relative;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: -6px; left: 0;
+  width: 0; height: 1px; background: var(--gold); transition: width .3s;
+}
+.nav-links a:hover { color: var(--gold); }
+.nav-links a:hover::after { width: 100%; }
+.nav-cta {
+  padding: 10px 28px; border: 1px solid var(--gold);
+  color: var(--gold); background: transparent;
+  letter-spacing: 2px; text-transform: uppercase; font-size: .78rem;
+  cursor: pointer; transition: .3s;
+}
+.nav-cta:hover { background: var(--gold); color: var(--ink); }
+
+/* ---------- HERO ---------- */
+.hero {
+  height: 100vh; min-height: 640px; position: relative;
+  background:
+    linear-gradient(135deg, rgba(26,29,38,.88) 0%, rgba(26,29,38,.55) 50%, rgba(201,169,97,.25) 100%),
+    url('https://images.unsplash.com/photo-1545173168-9f1947eebb7f?w=1920&q=80') center/cover no-repeat;
+  display: flex; align-items: center; padding: 0 8%;
+}
+.hero-inner { max-width: 720px; animation: fadeUp 1.2s ease both; }
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 10px;
+  color: var(--gold-light); letter-spacing: 4px;
+  text-transform: uppercase; font-size: .8rem; margin-bottom: 24px;
+}
+.hero-tag::before { content: ''; width: 50px; height: 1px; background: var(--gold); }
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.8rem, 6vw, 4.8rem);
+  color: #fff; line-height: 1.1; font-weight: 600;
+}
+.hero h1 em { font-style: italic; color: var(--gold-light); }
+.hero p {
+  color: rgba(255,255,255,.75); font-size: 1.08rem;
+  line-height: 1.8; margin: 26px 0 40px; max-width: 540px; font-weight: 300;
+}
+.hero-btns { display: flex; gap: 18px; flex-wrap: wrap; }
+.btn-primary {
+  padding: 16px 42px; background: var(--gold); color: var(--ink);
+  border: none; font-size: .85rem; letter-spacing: 2px;
+  text-transform: uppercase; cursor: pointer; transition: .3s;
+  text-decoration: none; display: inline-block;
+}
+.btn-primary:hover { background: var(--gold-light); transform: translateY(-3px); box-shadow: 0 12px 30px rgba(201,169,97,.4); }
+.btn-ghost {
+  padding: 16px 42px; background: transparent; color: #fff;
+  border: 1px solid rgba(255,255,255,.35); font-size: .85rem;
+  letter-spacing: 2px; text-transform: uppercase; cursor: pointer;
+  transition: .3s; text-decoration: none; display: inline-block;
+}
+.btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+.hero-stats {
+  position: absolute; bottom: 0; right: 0;
+  display: flex; background: rgba(26,29,38,.85);
+  backdrop-filter: blur(12px); border-top: 1px solid rgba(201,169,97,.3);
+  border-left: 1px solid rgba(201,169,97,.3);
+}
+.stat { padding: 26px 46px; text-align: center; border-right: 1px solid rgba(255,255,255,.08); }
+.stat:last-child { border-right: none; }
+.stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem; color: var(--gold); font-weight: 600;
+}
+.stat-label { font-size: .7rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,.5); margin-top: 4px; }
+
+.scroll-hint {
+  position: absolute; bottom: 34px; left: 8%;
+  color: rgba(255,255,255,.4); font-size: .7rem;
+  letter-spacing: 3px; text-transform: uppercase;
+  writing-mode: vertical-rl; animation: bob 2s ease-in-out infinite;
+}
+
+/* ---------- SECTION HELPERS ---------- */
+section { padding: 110px 8%; }
+.sec-tag {
+  display: inline-flex; align-items: center; gap: 12px;
+  color: var(--gold); letter-spacing: 4px;
+  text-transform: uppercase; font-size: .75rem; margin-bottom: 16px;
+}
+.sec-tag::before { content: ''; width: 40px; height: 1px; background: var(--gold); }
+.sec-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 4vw, 3rem); font-weight: 600; line-height: 1.2;
+}
+.sec-title em { font-style: italic; color: var(--gold); }
+.sec-sub { color: var(--muted); max-width: 560px; line-height: 1.8; margin-top: 16px; font-weight: 300; }
+
+/* ---------- SERVICES ---------- */
+.services { background: #fff; }
+.services-head { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 30px; margin-bottom: 70px; }
+.services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 30px; }
+.card {
+  position: relative; background: var(--cream);
+  padding: 48px 36px; overflow: hidden;
+  border: 1px solid rgba(201,169,97,.15);
+  transition: .45s cubic-bezier(.25,.8,.25,1);
+}
+.card::before {
+  content: ''; position: absolute; top: 0; left: 0;
+  width: 100%; height: 3px; background: linear-gradient(90deg, var(--gold), transparent);
+  transform: scaleX(0); transform-origin: left; transition: transform .5s;
+}
+.card:hover { transform: translateY(-10px); box-shadow: 0 30px 60px rgba(26,29,38,.1); background: var(--ink); }
+.card:hover::before { transform: scaleX(1); }
+.card:hover .card-icon { background: rgba(201,169,97,.15); color: var(--gold); border-color: var(--gold); }
+.card:hover h3 { color: #fff; }
+.card:hover p { color: rgba(255,255,255,.6); }
+.card:hover .price { color: var(--gold-light); }
+.card-icon {
+  width: 64px; height: 64px; border: 1px solid rgba(201,169,97,.4);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.7rem; margin-bottom: 26px; transition: .45s;
+}
+.card h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 12px; transition: .45s; }
+.card p { color: var(--muted); font-size: .9rem; line-height: 1.7; transition: .45s; font-weight: 300; }
+.price {
+  display: block; margin-top: 22px; padding-top: 18px;
+  border-top: 1px solid rgba(201,169,97,.2);
+  font-family: 'Playfair Display', serif; font-size: 1.15rem;
+  color: var(--gold); transition: .45s;
+}
+
+/* ---------- HOW IT WORKS ---------- */
+.how { background: var(--ink); color: #fff; position: relative; overflow: hidden; }
+.how::after {
+  content: ''; position: absolute; top: -120px; right: -120px;
+  width: 400px; height: 400px; border: 1px solid rgba(201,169,97,.12);
+  border-radius: 50%; pointer-events: none;
+}
+.how .sec-title { color: #fff; }
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 40px; margin-top: 70px; }
+.step { position: relative; padding-top: 30px; }
+.step-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 5rem; font-weight: 700;
+  color: transparent; -webkit-text-stroke: 1px rgba(201,169,97,.35);
+  position: absolute; top: -20px; left: 0; line-height: 1;
+}
+.step h3 { font-family: 'Playfair Display', serif; font-size: 1.25rem; margin: 60px 0 12px; color: var(--gold-light); }
+.step p { color: rgba(255,255,255,.55); font-size: .9rem; line-height: 1.7; font-weight: 300; }
+.step-line { display: none; }
+
+/* ---------- PREMIUM BANNER ---------- */
+.premium {
+  background:
+    linear-gradient(rgba(26,29,38,.82), rgba(26,29,38,.82)),
+    url('https://images.unsplash.com/photo-1517677208171-0bc6725a3e60?w=1600&q=80') center/cover fixed no-repeat;
+  text-align: center; color: #fff;
+}
+.premium .sec-tag { justify-content: center; }
+.premium .sec-tag::after { content: ''; width: 40px; height: 1px; background: var(--gold); }
+.premium .sec-title { color: #fff; max-width: 700px; margin: 0 auto; }
+.premium .sec-sub { margin: 20px auto 0; color: rgba(255,255,255,.6); }
+.perks { display: flex; justify-content: center; gap: 50px; flex-wrap: wrap; margin-top: 55px; }
+.perk { text-align: center; }
+.perk-icon {
+  width: 70px; height: 70px; margin: 0 auto 16px;
+  border: 1px solid rgba(201,169,97,.4); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem; background: rgba(201,169,97,.08);
+  transition: .3s;
+}
+.perk:hover .perk-icon { background: var(--gold); transform: translateY(-6px); }
+.perk h4 { font-size: .9rem; letter-spacing: 1px; margin-bottom: 6px; }
+.perk p { font-size: .78rem; color: rgba(255,255,255,.5); font-weight: 300; }
+
+/* ---------- TESTIMONIALS ---------- */
+.testimonials { background: #fff; }
+.t-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 60px; }
+.t-card {
+  background: var(--cream); padding: 42px 36px;
+  border-left: 3px solid var(--gold); position: relative;
+  transition: .3s;
+}
+.t-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(26,29,38,.08); }
+.t-quote { font-size: 2.6rem; color: var(--gold); font-family: 'Playfair Display', serif; line-height: 1; margin-bottom: 14px; }
+.t-card p { color: var(--ink-soft); font-size: .95rem; line-height: 1.8; font-weight: 300; font-style: italic; }
+.t-author { display: flex; align-items: center; gap: 14px; margin-top: 26px; padding-top: 20px; border-top: 1px solid rgba(201,169,97,.2); }
+.t-avatar {
+  width: 46px; height: 46px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold), var(--ink));
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 600; font-size: .9rem;
+}
+.t-name { font-weight: 600; font-size: .9rem; }
+.t-role { font-size: .75rem; color: var(--muted); }
+.stars { color: var(--gold); font-size: .8rem; letter-spacing: 3px; margin-top: 4px; }
+
+/* ---------- CTA ---------- */
+.cta {
+  background: linear-gradient(135deg, var(--ink) 0%, var(--ink-soft) 100%);
+  text-align: center; color: #fff; position: relative; overflow: hidden;
+}
+.cta::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(201,169,97,.14), transparent 60%);
+}
+.cta-inner { position: relative; z-index: 1; }
+.cta .sec-title { color: #fff; max-width: 640px; margin: 0 auto; }
+.cta .sec-sub { margin: 18px auto 40px; color: rgba(255,255,255,.6); }
+.cta-form { display: flex; max-width: 520px; margin: 0 auto; gap: 0; }
+.cta-form input {
+  flex: 1; padding: 17px 24px; border: 1px solid rgba(201,169,97,.3);
+  background: rgba(255,255,255,.05); color: #fff;
+  font-size: .9rem; outline: none; transition: .3s;
+}
+.cta-form input::placeholder { color: rgba(255,255,255,.35); }
+.cta-form input:focus { border-color: var(--gold); }
+.cta-form button {
+  padding: 17px 36px; background: var(--gold); color: var(--ink);
+  border: none; font-size: .8rem; letter-spacing: 2px;
+  text-transform: uppercase; cursor: pointer; transition: .3s; white-space: nowrap;
+}
+.cta-form button:hover { background: var(--gold-light); }
+.cta-note { font-size: .75rem; color: rgba(255,255,255,.35); margin-top: 16px; }
+
+/* ---------- FOOTER ---------- */
+footer { background: #12141b; color: rgba(255,255,255,.6); padding: 80px 8% 30px; }
+.foot-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.4fr; gap: 50px; padding-bottom: 50px; border-bottom: 1px solid rgba(255,255,255,.07); }
+.foot-grid h4 { color: #fff; font-size: .85rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 22px; }
+.foot-about .logo { margin-bottom: 18px; display: block; }
+.foot-about p { font-size: .88rem; line-height: 1.8; font-weight: 300; }
+.foot-links { list-style: none; }
+.foot-links li { margin-bottom: 12px; }
+.foot-links a { color: rgba(255,255,255,.5); text-decoration: none; font-size: .88rem; transition: .3s; }
+.foot-links a:hover { color: var(--gold); padding-left: 6px; }
+.foot-contact p { font-size: .88rem; line-height: 1.9; font-weight: 300; }
+.foot-contact strong { color: var(--gold); font-weight: 500; }
+.socials { display: flex; gap: 12px; margin-top: 20px; }
+.social {
+  width: 38px; height: 38px; border: 1px solid rgba(255,255,255,.15);
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,.6); text-decoration: none; font-size: .9rem;
+  transition: .3s;
+}
+.social:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-3px); }
+.foot-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 30px; font-size: .78rem; color: rgba(255,255,255,.3); flex-wrap: wrap; gap: 12px; }
+
+/* ---------- ANIMATIONS ---------- */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(10px); } }
+
+.reveal { opacity: 0; transform: translateY(50px); transition: opacity .8s ease, transform .8s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 900px) {
+  .nav-links { display: none; }
+  .hero-stats { position: static; margin-top: 50px; width: 100%; }
+  .stat { padding: 20px 24px; flex: 1; }
+  .scroll-hint { display: none; }
+  .foot-grid { grid-template-columns: 1fr 1fr; }
+  .cta-form { flex-direction: column; gap: 12px; }
+}
+@media (max-width: 560px) {
+  .foot-grid { grid-template-columns: 1fr; }
+  .hero-btns { flex-direction: column; }
+  .hero-btns a { text-align: center; }
+  .perks { gap: 30px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="logo">Luxe<span>Wash</span></a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#premium">Membership</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})">Book Pickup</button>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">Premium Garment Care Since 2012</div>
+    <h1>Your Clothes,<br><em>Reimagined</em> Clean.</h1>
+    <p>White-glove laundry service with free pickup and delivery. We treat every thread like couture — because you deserve nothing less.</p>
+    <div class="hero-btns">
+      <a href="#cta" class="btn-primary">Schedule Pickup</a>
+      <a href="#services" class="btn-ghost">Explore Services</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num" data-count="25000">0</div><div class="stat-label">Happy Clients</div></div>
+    <div class="stat"><div class="stat-num" data-count="12">0</div><div class="stat-label">Years of Care</div></div>
+    <div class="stat"><div class="stat-num" data-count="98">0</div><div class="stat-label">% Satisfaction</div></div>
+  </div>
+  <div class="scroll-hint">Scroll</div>
+</header>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="services-head reveal">
+    <div>
+      <div class="sec-tag">What We Offer</div>
+      <h2 class="sec-title">Crafted <em>Services</em><br>for Every Fabric</h2>
+    </div>
+    <p class="sec-sub">From everyday essentials to delicate heirlooms — each garment is sorted, treated, and finished by specialists.</p>
+  </div>
+  <div class="services-grid">
+    <div class="card reveal">
+      <div class="card-icon">🧺</div>
+      <h3>Wash & Fold</h3>
+      <p>Premium detergent, fabric softener, and precision folding. Delivered fresh to your door within 24 hours.</p>
+      <span class="price">From $2.50 / lb</span>
+    </div>
+    <div class="card reveal">
+      <div class="card-icon">👔</div>
+      <h3>Dry Cleaning</h3>
+      <p>Eco-solvent technology that protects colors and fibers on suits, dresses, and formalwear.</p>
+      <span class="price">From $8.00 / item</span>
+    </div>
+    <div class="card reveal">
+      <div class="card-icon">✨</div>
+      <h3>Press & Iron</h3>
+      <p>Steam-pressed with commercial-grade equipment for a crisp, wrinkle-free finish every time.</p>
+      <span class="price">From $3.00 / item</span>
+    </div>
+    <div class="card reveal">
+      <div class="card-icon">👑</div>
+      <h3>Luxury Care</h3>
+      <p>Silk, cashmere, leather, and wedding gowns handled with museum-level archival techniques.</p>
+      <span class="price">From $25.00 / item</span>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="reveal">
+    <div class="sec-tag">The Process</div>
+    <h2 class="sec-title">Four Steps to <em>Effortless</em> Freshness</h2>
+    <p class="sec-sub" style="color:rgba(255,255,255,.5)">We designed the entire experience so you never have to think about laundry again.</p>
+  </div>
+  <div class="steps">
+    <div class="step reveal">
+      <div class="step-num">01</div>
+      <h3>Schedule</h3>
+      <p>Book a pickup online or through our app in under 60 seconds. Choose your preferred time window.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">02</div>
+      <h3>We Collect</h3>
+      <p>Our uniformed concierge arrives at your doorstep, tags your items, and handles everything with care.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">03</div>
+      <h3>Expertly Cleaned</h3>
+      <p>Garments are sorted by fabric and color, then cleaned using garment-specific protocols.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">04</div>
+      <h3>Delivered Fresh</h3>
+      <p>Return delivery within 24–48 hours, perfectly folded or hung in garment-protective packaging.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PREMIUM -->
+<section class="premium" id="premium">
+  <div class="reveal">
+    <div class="sec-tag">Membership</div>
+    <h2 class="sec-title">Join the <em>LuxeWash</em> Black Card</h2>
+    <p class="sec-sub">Priority scheduling, unlimited free pickups, and exclusive pricing — all for one flat monthly rate.</p>
+  </div>
+  <div class="perks reveal">
+    <div class="perk">
+      <div class="perk-icon">🚚</div>
+      <h4>Free Delivery</h4>
+      <p>Unlimited pickups & drops</p>
+    </div>
+    <div class="perk">
+      <div class="perk-icon">⚡</div>
+      <h4>Same-Day</h4>
+      <p>Express turnaround option</p>
+    </div>
+    <div class="perk">
+      <div class="perk-icon">🏷️</div>
+      <h4>20% Off</h4>
+      <p>All premium services</p>
+    </div>
+    <div class="perk">
+      <div class="perk-icon">🎁</div>
+      <h4>Birthday Care</h4>
+      <p>Free luxury clean yearly</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="reviews">
+  <div class="reveal">
+    <div class="sec-tag">Testimonials</div>
+    <h2 class="sec-title">Loved by <em>Thousands</em></h2>
+  </div>
+  <div class="t-grid">
+    <div class="t-card reveal">
+      <div class="t-quote">“</div>
+      <p>LuxeWash completely changed my routine. My suits have never looked better and I never have to leave the house.</p>
+      <div class="t-author">
+        <div class="t-avatar">JM</div>
+        <div>
+          <div class="t-name">James Mitchell</div>
+          <div class="t-role">Executive, Austin TX</div>
+          <div class="stars">★★★★★</div>
+        </div>
+      </div>
+    </div>
+    <div class="t-card reveal">
+      <div class="t-quote">“</div>
+      <p>They handled my wedding dress like it was a priceless artifact. The attention to detail is genuinely remarkable.</p>
+      <div class="t-author">
+        <div class="t-avatar">SR</div>
+        <div>
+          <div class="t-name">Sofia Ramirez</div>
+          <div class="t-role">Designer, Miami FL</div>
+          <div class="stars">★★★★★</div>
+        </div>
+      </div>
+    </div>
+    <div class="t-card reveal">
+      <div class="t-quote">“</div>
+      <p>As a family of five, laundry was a nightmare. Now it's completely taken care of — worth every single penny.</p>
+      <div class="t-author">
+        <div class="t-avatar">DK</div>
+        <div>
+          <div class="t-name">David Kim</div>
+          <div class="t-role">Father of three, Seattle WA</div>
+          <div class="stars">★★★★★</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="cta">
+  <div class="cta-inner reveal">
+    <div class="sec-tag" style="justify-content:center">Get Started</div>
+    <h2 class="sec-title">First Wash <em>50% Off</em></h2>
+    <p class="sec-sub">Drop your email and we'll send a code plus schedule your first free pickup.</p>
+    <form class="cta-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Welcome! ✓'; this.querySelector('button').style.background='#7ec97e';">
+      <input type="email" placeholder="your@email.com" required>
+      <button type="submit">Claim Offer</button>
+    </form>
+    <p class="cta-note">No credit card required · Cancel anytime · Same-day pickup available</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-grid">
+    <div class="foot-about">
+      <a href="#" class="logo">Luxe<span>Wash</span></a>
+      <p>Premium laundry and garment care, delivered to your door. Proudly serving homes and businesses since 2012.</p>
+      <div class="socials">
+        <a href="#" class="social">f</a>
+        <a href="#" class="social">𝕏</a>
+        <a href="#" class="social">in</a>
+        <a href="#" class="social">ig</a>
+      </div>
+    </div>
+    <div>
+      <h4>Services</h4>
+      <ul class="foot-links">
+        <li><a href="#">Wash & Fold</a></li>
+        <li><a href="#">Dry Cleaning</a></li>
+        <li><a href="#">Press & Iron</a></li>
+        <li><a href="#">Luxury Care</a></li>
+        <li><a href="#">Commercial</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Company</h4>
+      <ul class="foot-links">
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Franchise</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+    <div class="foot-contact">
+      <h4>Contact</h4>
+      <p><strong>Phone:</strong> (555) 234-5678</p>
+      <p><strong>Email:</strong> hello@luxewash.com</p>
+      <p><strong>Address:</strong> 418 Silk Avenue,<br>Suite 100, Austin, TX 78701</p>
+      <p><strong>Hours:</strong> Mon–Sat 7am–9pm</p>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2026 LuxeWash. All rights reserved.</span>
+    <span>Privacy Policy · Terms of Service</span>
+  </div>
+</footer>
+
+<script>
+// Nav scroll effect
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 60));
+
+// Reveal on scroll
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, { threshold: 0.15 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Counter animation
+const counters = document.querySelectorAll('[data-count]');
+const cObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const el = e.target, target = +el.dataset.count;
+    let current = 0;
+    const step = target / 60;
+    const tick = () => {
+      current += step;
+      if (current < target) { el.textContent = Math.floor(current).toLocaleString(); requestAnimationFrame(tick); }
+      else el.textContent = target.toLocaleString() + (target >= 1000 ? '+' : '');
+    };
+    tick();
+    cObs.unobserve(el);
+  });
+}, { threshold: 0.5 });
+counters.forEach(c => cObs.observe(c));
+</script>
+</body>
+</html>
